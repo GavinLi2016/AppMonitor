@@ -28,15 +28,6 @@ public class MonitorServer extends Service {
     private class MessageHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            /*Message replyMsg = new Message();
-            Bundle data = new Bundle();
-            data.putString("reply", msg.getData().getString("send") + "--server msg");
-            replyMsg.setData(data);
-            try {
-                msg.replyTo.send(replyMsg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }*/
 
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
