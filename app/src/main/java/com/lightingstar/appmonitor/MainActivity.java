@@ -21,6 +21,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.lightingstar.appmonitor.model.AppConstance;
 import com.lightingstar.appmonitor.server.MonitorServer;
 import com.lightingstar.appmonitor.util.PermissionsUtil;
 
@@ -132,9 +133,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if (serviceBound) {
-            //MainApplication.sendMessage("app is closing", AppConstance.APP_CLOSE_MSG);
+            MainApplication.sendMessage("app is closing", AppConstance.APP_CLOSE_MSG);
             unbindService(serviceConnection);
             serviceBound = false;
+            MainApplication.setMessage(null);
         }
         super.onDestroy();
     }
