@@ -4,25 +4,16 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.widget.Toast;
-
-import com.lightingstar.appmonitor.util.ForegroundAppUtil;
+import android.os.Message;
+import android.os.Messenger;
 
 public class MonitorServer extends Service {
+    private final Messenger serverMsger = new Messenger(new MessageHandler());
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return serverMsger.getBinder();
     }
-
-    private Handler handler = new Handler();
-    private Runnable r = new Runnable() {
-        @Override
-        public void run() {
-            String foregroundActivityName = ForegroundAppUtil.getForegroundActivityName(getApplicationContext());
-            Toast.makeText(getApplicationContext(), foregroundActivityName, Toast.LENGTH_SHORT).show();
-            handler.postDelayed(r, 5000);
-        }
-    };
 
     @Override
     public void onCreate() {
@@ -31,7 +22,27 @@ public class MonitorServer extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        handler.postDelayed(r, 5000);
         return START_STICKY;
+    }
+
+    private class MessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            /*Message replyMsg = new Message();
+            Bundle data = new Bundle();
+            data.putString("reply", msg.getData().getString("send") + "--server msg");
+            replyMsg.setData(data);
+            try {
+                msg.replyTo.send(replyMsg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }*/
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+        }
     }
 }

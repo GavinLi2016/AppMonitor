@@ -9,7 +9,10 @@ import android.os.Build;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-public class WindowChangeDetectingService extends AccessibilityService {
+import com.lightingstar.appmonitor.MainApplication;
+
+public class WindowMonitorService extends AccessibilityService {
+
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
@@ -29,18 +32,27 @@ public class WindowChangeDetectingService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            if (event.getPackageName() != null && event.getClassName() != null) {
-                ComponentName componentName = new ComponentName(
-                        event.getPackageName().toString(),
-                        event.getClassName().toString()
-                );
+            if (event.getPackageName() == null || event.getClassName() == null) {
+                return;
+            }
+            //窗口还是上次的app打开的
+            if (event.getPackageName().equals(MainApplication.appRuningInfo.getPackageName())){
+                return;
+            }
 
-                ActivityInfo activityInfo = tryGetActivity(componentName);
-                boolean isActivity = activityInfo != null;
-                if (isActivity)
-                    Log.i("CurrentActivity", componentName.flattenToShortString());
+            ComponentName componentName = new ComponentName(
+                    event.getPackageName().toString(),
+                    event.getClassName().toString()
+            );
+
+            ActivityInfo activityInfo = tryGetActivity(componentName);
+            if (activityInfo != null) {
+                Log.i("Current Package", componentName.getPackageName());
+                //用户打开了另外一个app，发送通知消息
+                MainApplication.messageProcessUtil.auditAppInfo(componentName.getPackageName());
             }
         }
+
     }
 
     private ActivityInfo tryGetActivity(ComponentName componentName) {
