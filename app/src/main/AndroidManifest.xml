@@ -29,9 +29,17 @@
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
             </intent-filter>
         </service>
+        <receiver android:name=".server.BootBroadcastReceiver" >
+            <intent-filter >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
     </application>
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <!--<uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission xmlns:tools="http://schemas.android.com/tools"

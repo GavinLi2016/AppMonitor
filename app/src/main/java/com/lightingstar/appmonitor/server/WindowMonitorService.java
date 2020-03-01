@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.lightingstar.appmonitor.MainApplication;
+import com.lightingstar.appmonitor.model.AppConstance;
 
 public class WindowMonitorService extends AccessibilityService {
 
@@ -49,7 +50,7 @@ public class WindowMonitorService extends AccessibilityService {
             if (activityInfo != null) {
                 Log.i("Current Package", componentName.getPackageName());
                 //用户打开了另外一个app，发送通知消息
-                MainApplication.messageProcessUtil.auditAppInfo(componentName.getPackageName());
+                MainApplication.sendMessage(componentName.getPackageName(), AppConstance.WIN_CHANGE_MSG);
             }
         }
 

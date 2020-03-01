@@ -21,7 +21,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.PermissionChecker;
+import androidx.core.content.ContextCompat;
 
 import com.lightingstar.appmonitor.server.WindowMonitorService;
 
@@ -30,19 +30,19 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PermissionsUtils {
+public class PermissionsUtil {
     private final int mRequestCode = 100;//权限请求码
     public static boolean showSystemSetting = true;
 
-    private PermissionsUtils() {
+    private PermissionsUtil() {
     }
 
-    private static PermissionsUtils permissionsUtils;
+    private static PermissionsUtil permissionsUtils;
     private IPermissionsResult mPermissionsResult;
 
-    public static PermissionsUtils getInstance() {
+    public static PermissionsUtil getInstance() {
         if (permissionsUtils == null) {
-            permissionsUtils = new PermissionsUtils();
+            permissionsUtils = new PermissionsUtil();
         }
         return permissionsUtils;
     }
@@ -109,7 +109,6 @@ public class PermissionsUtils {
         List<String> mPermissionList = new ArrayList<>();
         //逐个判断你要的权限是否已经通过
         for (int i = 0; i < permissions.length; i++) {
-            //if (ContextCompat.checkSelfPermission(context, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
             if (!selfPermissionGranted(context,permissions[i])) {
                 mPermissionList.add(permissions[i]);//添加还未授予的权限
             }
@@ -125,18 +124,19 @@ public class PermissionsUtils {
     }
 
     public boolean selfPermissionGranted(Context context, String permission) {
-        boolean ret = true;
+        //boolean ret = true;
         if (permission.equals(Manifest.permission.SYSTEM_ALERT_WINDOW)){
             return checkFloatPermission(context);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        return ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (context.getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.M) {
                 ret = context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
             } else {
                 ret = PermissionChecker.checkSelfPermission(context, permission) == PermissionChecker.PERMISSION_GRANTED;
             }
-        }
-        return ret;
+        }*/
+        //return ret;
     }
 
     /**
@@ -262,5 +262,7 @@ public class PermissionsUtils {
         void passPermissons();
 
         void forbitPermissons();
+
+        void checkAccessibilitySetting();
     }
 }
