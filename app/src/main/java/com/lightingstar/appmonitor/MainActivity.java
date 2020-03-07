@@ -1,15 +1,9 @@
 package com.lightingstar.appmonitor;
 
 import android.Manifest;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Messenger;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -21,7 +15,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.lightingstar.appmonitor.model.AppConstance;
 import com.lightingstar.appmonitor.server.MonitorServer;
 import com.lightingstar.appmonitor.util.PermissionsUtil;
 
@@ -44,28 +37,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        //startService(new Intent(getApplicationContext(), MonitorServer.class));
-        Intent serviceIntent = new Intent(this, MonitorServer.class);
-        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-
+        startService(new Intent(getApplicationContext(), MonitorServer.class));
 
         this.checkPermission();
     }
 
-    private boolean serviceBound = false;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder binder) {
-            Log.w("component name:", name.getClassName());
-            MainApplication.setMessage(new Messenger(binder));
-            serviceBound = true;
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            serviceBound = false;
-        }
-    };
 
     //创建监听权限的接口对象
     PermissionsUtil.IPermissionsResult permissionsResult = new PermissionsUtil.IPermissionsResult() {
@@ -129,16 +106,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    @Override
-    protected void onDestroy() {
-        if (serviceBound) {
-            MainApplication.sendMessage("app is closing", AppConstance.APP_CLOSE_MSG);
-            unbindService(serviceConnection);
-            serviceBound = false;
-            MainApplication.setMessage(null);
-        }
-        super.onDestroy();
-    }
-
 }

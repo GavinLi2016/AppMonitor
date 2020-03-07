@@ -1,20 +1,18 @@
 package com.lightingstar.appmonitor.server;
 
-import android.app.ActivityManager;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.text.TextUtils;
 
 import com.lightingstar.appmonitor.MainActivity;
+import com.lightingstar.appmonitor.MainApplication;
 import com.lightingstar.appmonitor.model.AppConstance;
 import com.lightingstar.appmonitor.util.DialogUtil;
 import com.lightingstar.appmonitor.util.RecordAppInfoUtil;
-
-import java.util.List;
 
 public class MonitorServer extends Service {
 
@@ -47,50 +45,33 @@ public class MonitorServer extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        this.dialogUtil = new DialogUtil(this);
-        this.recordAppInfoUtil = new RecordAppInfoUtil();
 
-        return serverMsger.getBinder();
+        return null;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        /*ActivityManager mActivityManager =(ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-
-
-        boolean isRun=isRunningProcess(mActivityManager);
-        //Log.i(TAG, String.format("onCreate: %s %s pid=%d uid=%d isRun=%s", mPackName,process, Process.myPid(), Process.myUid(),isRun));
-
-        if(!isRun){
-            Intent intent = getPackageManager().getLaunchIntentForPackage(AppConstance.APP_PACKAGE_NAME);
-            if(intent!=null){
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        }*/
-    }
-
-    /**
-     * 进程是否存活
-     * @return
-     */
-    public static boolean isRunningProcess(ActivityManager manager) {
-        if(manager==null)
-            return false;
-        List<ActivityManager.RunningAppProcessInfo> runnings = manager.getRunningAppProcesses();
-        if (runnings != null) {
-            for (ActivityManager.RunningAppProcessInfo info : runnings) {
-                if(TextUtils.equals(info.processName,AppConstance.APP_PACKAGE_NAME)){
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        this.dialogUtil = new DialogUtil(this);
+        this.recordAppInfoUtil = new RecordAppInfoUtil();
+        MainApplication.setMessage(serverMsger);
+
         return START_STICKY;
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Intent intent = new Intent(AppConstance.ACTION_RESTART);
+        intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setComponent(new ComponentName(AppConstance.APP_PACKAGE_NAME,
+                BootBroadcastReceiver.class.getName()));
+
+        sendBroadcast(intent);
+        super.onDestroy();
     }
 }

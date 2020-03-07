@@ -3,22 +3,24 @@ package com.lightingstar.appmonitor.server;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.lightingstar.appmonitor.MainActivity;
+import com.lightingstar.appmonitor.model.AppConstance;
+import com.lightingstar.appmonitor.util.LogUtil;
 
 
 public class BootBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "BootBroadcastReceiver";
 
-    private static final String ACTION_BOOT = "android.intent.action.BOOT_COMPLETED";
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "Boot this system , BootBroadcastReceiver onReceive()");
+        LogUtil.info(TAG, "Boot this system , BootBroadcastReceiver onReceive()");
 
-        if (intent.getAction().equals(ACTION_BOOT)) {
-            Log.i(TAG, "BootBroadcastReceiver onReceive(), Do thing!");
+        if (intent.getAction().equals(AppConstance.ACTION_BOOT) ||
+                intent.getAction().equals(AppConstance.ACTION_RESTART)) {
+            LogUtil.info(TAG, "start application");
 
             Intent mBootIntent = new Intent(context, MainActivity.class);
             //下面这句话必须加上才能开机自动运行app的界面

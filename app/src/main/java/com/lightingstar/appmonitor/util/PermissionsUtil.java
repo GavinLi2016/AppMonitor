@@ -13,7 +13,6 @@ import android.os.Binder;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Window;
@@ -59,15 +58,15 @@ public class PermissionsUtil {
             accessibilityEnabled = Settings.Secure.getInt(
                     mContext.getApplicationContext().getContentResolver(),
                     android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
-            Log.v("info:", "accessibilityEnabled = " + accessibilityEnabled);
+            LogUtil.info("info:", "accessibilityEnabled = " + accessibilityEnabled);
         } catch (Settings.SettingNotFoundException e) {
-            Log.e("info:", "Error finding setting, default accessibility to not found: "
+            LogUtil.info("info:", "Error finding setting, default accessibility to not found: "
                     + e.getMessage());
         }
         TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
 
         if (accessibilityEnabled == 1) {
-            Log.v("info:", "***ACCESSIBILITY IS ENABLED*** -----------------");
+            LogUtil.info("info:", "***ACCESSIBILITY IS ENABLED*** -----------------");
             String settingValue = Settings.Secure.getString(
                     mContext.getApplicationContext().getContentResolver(),
                     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
@@ -76,15 +75,15 @@ public class PermissionsUtil {
                 while (mStringColonSplitter.hasNext()) {
                     String accessibilityService = mStringColonSplitter.next();
 
-                    Log.v("info:", "-------------- > accessibilityService :: " + accessibilityService + " " + service);
+                    LogUtil.info("info:", "-------------- > accessibilityService :: " + accessibilityService + " " + service);
                     if (accessibilityService.equalsIgnoreCase(service)) {
-                        Log.v("info:", "We've found the correct setting - accessibility is switched on!");
+                        LogUtil.info("info:", "We've found the correct setting - accessibility is switched on!");
                         return true;
                     }
                 }
             }
         } else {
-            Log.v("info:", "***ACCESSIBILITY IS DISABLED***");
+            LogUtil.info("info:", "***ACCESSIBILITY IS DISABLED***");
         }
 
         return false;

@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.util.Log;
 
+import com.lightingstar.appmonitor.Task.MyAsyncTaskTemplate;
+import com.lightingstar.appmonitor.Task.QueryAppInfoTask;
 import com.lightingstar.appmonitor.model.AppRuningInfo;
+import com.lightingstar.appmonitor.util.LogUtil;
 
 import java.util.HashSet;
 
@@ -20,12 +22,19 @@ public class MainApplication extends Application {
 
     public static AppRuningInfo appRuningInfo = new AppRuningInfo();
 
+    private static QueryAppInfoTask queryAppInfoTask;
+    private static MyAsyncTaskTemplate myAsyncTaskTemplate = new MyAsyncTaskTemplate();
+
 
     @Override public void onCreate() {
         super.onCreate();
         sContext = this;
 
         initForbiddentPackages();
+
+        queryAppInfoTask = new QueryAppInfoTask(this);
+        myAsyncTaskTemplate.execute(queryAppInfoTask);
+        //installedAppInfoTask.setAppInfos((List<AppBasicInfo>) );
     }
 
     /**
@@ -45,7 +54,7 @@ public class MainApplication extends Application {
 
     public static void sendMessage(String msgContent, int msgType){
         if (clientMsger==null){
-            Log.i("info","no client msg sender");
+            LogUtil.info("info","no client msg sender");
             return;
         }
         Message msg = new Message() ;

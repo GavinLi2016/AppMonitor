@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.lightingstar.appmonitor.MainActivity;
@@ -52,14 +51,14 @@ public class DialogUtil {
                         isShow = false;
                         dialog.dismiss();
                         if (!MainApplication.appRuningInfo.getPackageName().equals(AppConstance.APP_PACKAGE_NAME)
-                            && !moveToFront()) {
+                            && !moveToFront()
+                           ) {
                             Intent intent = new Intent(context, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                         }
                     }
-                })
-                .create();
+                }).create();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         }else {
@@ -77,12 +76,13 @@ public class DialogUtil {
             ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningTaskInfo> recentTasks = manager.getRunningTasks(Integer.MAX_VALUE);
             for (int i = 0; i < recentTasks.size(); i++){
-                Log.e("xk", "  "+recentTasks.get(i).baseActivity.toShortString() + "   ID: "+recentTasks.get(i).id+"");
-                Log.e("xk","@@@@  "+recentTasks.get(i).baseActivity.toShortString());
+                //LogUtil.info("xk", "  "+recentTasks.get(i).baseActivity.toShortString() + "   ID: "+recentTasks.get(i).id+"");
+                //LogUtil.info("xk","@@@@  "+recentTasks.get(i).baseActivity.toShortString());
                 // bring to front
                 if (recentTasks.get(i).baseActivity.toShortString().indexOf(AppConstance.APP_PACKAGE_NAME) > -1) {
                     findBackendTaskFlag = true;
                     manager.moveTaskToFront(recentTasks.get(i).id, ActivityManager.MOVE_TASK_WITH_HOME);
+                    break;
                 }
             }
         }
