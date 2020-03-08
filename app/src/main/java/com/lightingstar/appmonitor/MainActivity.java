@@ -5,41 +5,81 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.lightingstar.appmonitor.server.MonitorServer;
+import com.lightingstar.appmonitor.core.BaseActivity;
+import com.lightingstar.appmonitor.core.BaseFragment;
+import com.lightingstar.appmonitor.fragment.profile.ProfileFragment;
+import com.lightingstar.appmonitor.fragment.task.TaskFragment;
+import com.lightingstar.appmonitor.fragment.webapp.WebAppFragment;
 import com.lightingstar.appmonitor.util.PermissionsUtil;
+import com.xuexiang.xui.adapter.FragmentAdapter;
+import com.xuexiang.xui.utils.ResUtils;
+import com.xuexiang.xutil.common.CollectionUtils;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+
+public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private boolean permissionPassFlag =false;
     private boolean accessibilityPassFlag =false;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    /**
+     * 底部导航栏
+     */
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigation;
+
+    private String[] mTitles;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected boolean isSupportSlideBack() {
+        return false;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+        //setContentView(R.layout.activity_main);
+        initViews();
 
-        startService(new Intent(getApplicationContext(), MonitorServer.class));
+        bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        this.checkPermission();
+        //startService(new Intent(getApplicationContext(), MonitorServer.class));
+
+        //this.checkPermission();
+    }
+
+    private void initViews() {
+        mTitles = ResUtils.getStringArray(R.array.home_titles);
+        toolbar.setTitle(mTitles[0]);
+        toolbar.inflateMenu(R.menu.menu_main);
+
+        //主页内容填充
+        BaseFragment[] fragments = new BaseFragment[]{
+                new TaskFragment(),
+                new WebAppFragment(),
+                new ProfileFragment()
+        };
+        FragmentAdapter<BaseFragment> adapter = new FragmentAdapter<>(getSupportFragmentManager(), fragments);
+        viewPager.setOffscreenPageLimit(mTitles.length - 1);
+        viewPager.setAdapter(adapter);
     }
 
 
@@ -106,4 +146,24 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    /**
+     * 底部导航栏点击事件
+     *
+     * @param menuItem
+     * @return
+     */
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int index = CollectionUtils.arrayIndexOf(mTitles, menuItem.getTitle());
+        if (index != -1) {
+            toolbar.setTitle(menuItem.getTitle());
+            viewPager.setCurrentItem(index, false);
+
+            //updateSideNavStatus(menuItem);
+            return true;
+        }
+        return false;
+    }
+
 }

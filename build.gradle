@@ -1,35 +1,26 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    repositories {
-        maven{ url 'https://maven.aliyun.com/repository/google'}
-
-        maven{ url 'https://maven.aliyun.com/repository/gradle-plugin'}
-
-        maven{ url 'https://maven.aliyun.com/repository/public'}
-
-        maven{ url 'https://maven.aliyun.com/repository/jcenter'}
-        
-    }
+    apply from: './versions.gradle'
+    addRepos(repositories) //增加代码仓库
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
-        
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath deps.android_gradle_plugin
+        classpath deps.android_maven_gradle_plugin
+
+        classpath 'com.chenenyu:img-optimizer:1.1.1' // 图片压缩
+        //美团多渠道打包
+        classpath 'com.meituan.android.walle:plugin:1.1.6'
+        //滴滴的质量优化框架
+        if (isNeedPackage.toBoolean()) {
+            classpath "com.didiglobal.booster:booster-gradle-plugin:0.14.0"
+            classpath "com.didiglobal.booster:booster-task-all:0.14.0"
+            classpath "com.didiglobal.booster:booster-transform-all:0.14.0"
+        }
     }
 }
 
 allprojects {
-    repositories {
-        maven{ url 'https://maven.aliyun.com/repository/google'}
-
-        maven{ url 'https://maven.aliyun.com/repository/gradle-plugin'}
-
-         maven{ url 'https://maven.aliyun.com/repository/public'}
-
-         maven{ url 'https://maven.aliyun.com/repository/jcenter'}
-        
-    }
+    addRepos(repositories)
 }
 
 task clean(type: Delete) {

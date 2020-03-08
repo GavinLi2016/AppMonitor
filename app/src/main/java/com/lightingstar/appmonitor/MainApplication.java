@@ -7,10 +7,16 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import androidx.multidex.MultiDex;
+
 import com.lightingstar.appmonitor.Task.MyAsyncTaskTemplate;
 import com.lightingstar.appmonitor.Task.QueryAppInfoTask;
 import com.lightingstar.appmonitor.model.AppRuningInfo;
 import com.lightingstar.appmonitor.util.LogUtil;
+import com.lightingstar.appmonitor.util.sdkinit.ANRWatchDogInit;
+import com.lightingstar.appmonitor.util.sdkinit.UMengInit;
+import com.lightingstar.appmonitor.util.sdkinit.XBasicLibInit;
+import com.lightingstar.appmonitor.util.sdkinit.XUpdateInit;
 
 import java.util.HashSet;
 
@@ -25,10 +31,49 @@ public class MainApplication extends Application {
     private static QueryAppInfoTask queryAppInfoTask;
     private static MyAsyncTaskTemplate myAsyncTaskTemplate = new MyAsyncTaskTemplate();
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        //解决4.x运行崩溃的问题
+        MultiDex.install(this);
+    }
 
     @Override public void onCreate() {
         super.onCreate();
         sContext = this;
+
+        this.initLibs();
+    }
+
+    /**
+     * 初始化基础库
+     */
+    private void initLibs() {
+        XBasicLibInit.init(this);
+
+        XUpdateInit.init(this);
+
+        //运营统计数据运行时不初始化
+        if (!MainApplication.isDebug()) {
+            UMengInit.init(this);
+        }
+
+        //ANR监控
+        ANRWatchDogInit.init();
+
+        this.initApp();
+    }
+
+    /**
+     * @return 当前app是否是调试开发模式
+     */
+    public static boolean isDebug() {
+        return BuildConfig.DEBUG;
+    }
+
+    private void initApp(){
+        //XUI.init(this); //初始化UI框架
+        //XUI.debug(true);  //开启UI框架调试日志
 
         initForbiddentPackages();
 
@@ -42,7 +87,7 @@ public class MainApplication extends Application {
      */
     private void initForbiddentPackages(){
         forbiddentPackages = new HashSet<>();
-        forbiddentPackages.add("com.lightingstar.studentmonitor");
+        forbiddentPackages.add("com.lightingstar.appmonitor");
         forbiddentPackages.add("com.example.android.appusagestatistics");
     }
 
