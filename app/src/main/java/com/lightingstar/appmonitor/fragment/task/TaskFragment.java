@@ -17,11 +17,19 @@
 
 package com.lightingstar.appmonitor.fragment.task;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.lightingstar.appmonitor.R;
+import com.lightingstar.appmonitor.adapter.TaskListViewListAdapter;
 import com.lightingstar.appmonitor.core.BaseFragment;
+import com.lightingstar.appmonitor.util.MockDataProvider;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
+import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
+
+import butterknife.BindView;
 
 /**
  * 首页任务
@@ -32,6 +40,12 @@ import com.xuexiang.xui.widget.actionbar.TitleBar;
 @Page(anim = CoreAnim.none)
 public class TaskFragment extends BaseFragment {
 
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
+
+    private TaskListViewListAdapter mAdapter;
 
     /**
      * @return 返回为 null意为不需要导航栏
@@ -56,11 +70,29 @@ public class TaskFragment extends BaseFragment {
      */
     @Override
     protected void initViews() {
-
+        mAdapter = new TaskListViewListAdapter();
+        WidgetUtils.initRecyclerView(recyclerView, 0);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
     protected void initListeners() {
-
+//下拉刷新
+        refreshLayout.setOnRefreshListener(refreshLayout -> {
+            // TODO: 2020-02-25 这里只是模拟了网络请求
+            refreshLayout.getLayout().postDelayed(() -> {
+                mAdapter.refresh(MockDataProvider.getTaskInfos());
+                refreshLayout.finishRefresh();
+            }, 1000);
+        });
+        //上拉加载
+        refreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            // TODO: 2020-02-25 这里只是模拟了网络请求
+            refreshLayout.getLayout().postDelayed(() -> {
+                mAdapter.loadMore(MockDataProvider.getTaskInfos());
+                refreshLayout.finishLoadMore();
+            }, 1000);
+        });
+        refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
     }
 }

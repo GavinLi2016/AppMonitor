@@ -33,6 +33,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            tools:listitem="@layout/adapter_item_simple_list_2" />
+
 
         <!--    注意修改包名时，这里也需要修改    -->
         <com.lightingstar.appmonitor.widget.MaterialFooter
