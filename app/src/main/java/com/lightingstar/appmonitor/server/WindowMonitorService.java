@@ -5,7 +5,7 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.os.Build;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.lightingstar.appmonitor.MainApplication;
+import com.lightingstar.appmonitor.MyApp;
 import com.lightingstar.appmonitor.model.AppConstance;
 import com.lightingstar.appmonitor.util.LogUtil;
 
@@ -35,12 +35,12 @@ public class WindowMonitorService extends AccessibilityService {
                 return;
             }
             //窗口还是上次的app打开的
-            if (packageName.equals(MainApplication.appRuningInfo.getPackageName()) ||
+            if (packageName.equals(MyApp.appRuningInfo.getPackageName()) ||
                     packageName.equals(AppConstance.APP_PACKAGE_NAME ) ) {
                 return;
             }
 
-            MainApplication.sendMessage(event.getPackageName().toString(), AppConstance.WIN_CHANGE_MSG);
+            MyApp.sendMessage(event.getPackageName().toString(), AppConstance.WIN_CHANGE_MSG);
 
             /*ComponentName componentName = new ComponentName(
                     event.getPackageName().toString(),

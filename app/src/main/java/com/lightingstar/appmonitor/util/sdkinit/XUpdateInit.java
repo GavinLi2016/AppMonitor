@@ -20,7 +20,7 @@ package com.lightingstar.appmonitor.util.sdkinit;
 import android.app.Application;
 import android.content.Context;
 
-import com.lightingstar.appmonitor.MainApplication;
+import com.lightingstar.appmonitor.MyApp;
 import com.lightingstar.appmonitor.util.update.CustomUpdateDownloader;
 import com.lightingstar.appmonitor.util.update.CustomUpdateFailureListener;
 import com.lightingstar.appmonitor.util.update.XHttpUpdateHttpServiceImpl;
@@ -46,7 +46,7 @@ public final class XUpdateInit {
 
     public static void init(Application application) {
         XUpdate.get()
-                .debug(MainApplication.isDebug())
+                .debug(MyApp.isDebug())
                 //默认设置只在wifi下检查版本更新
                 .isWifiOnly(false)
                 //默认设置使用get请求检查版本

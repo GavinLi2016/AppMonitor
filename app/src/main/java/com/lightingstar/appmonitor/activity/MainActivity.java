@@ -1,4 +1,4 @@
-package com.lightingstar.appmonitor;
+package com.lightingstar.appmonitor.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,11 +13,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.lightingstar.appmonitor.R;
 import com.lightingstar.appmonitor.core.BaseActivity;
 import com.lightingstar.appmonitor.core.BaseFragment;
 import com.lightingstar.appmonitor.fragment.profile.ProfileFragment;
 import com.lightingstar.appmonitor.fragment.task.TaskFragment;
 import com.lightingstar.appmonitor.fragment.webapp.WebAppFragment;
+import com.lightingstar.appmonitor.server.MonitorServer;
 import com.lightingstar.appmonitor.util.PermissionsUtil;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
@@ -61,9 +63,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        //startService(new Intent(getApplicationContext(), MonitorServer.class));
+        startService(new Intent(getApplicationContext(), MonitorServer.class));
 
-        //this.checkPermission();
+        this.checkPermission();
     }
 
     private void initViews() {

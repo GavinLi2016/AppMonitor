@@ -19,7 +19,6 @@ package com.lightingstar.appmonitor.activity;
 
 import android.view.KeyEvent;
 
-import com.lightingstar.appmonitor.MainActivity;
 import com.lightingstar.appmonitor.R;
 import com.lightingstar.appmonitor.util.MMKVUtils;
 import com.lightingstar.appmonitor.util.Utils;

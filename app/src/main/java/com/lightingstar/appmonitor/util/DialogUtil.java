@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.view.WindowManager;
 
-import com.lightingstar.appmonitor.MainActivity;
-import com.lightingstar.appmonitor.MainApplication;
+import com.lightingstar.appmonitor.activity.MainActivity;
+import com.lightingstar.appmonitor.MyApp;
 import com.lightingstar.appmonitor.model.AppConstance;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class DialogUtil {
 
     public void showDialog(String msg){
         //判断是否要禁止运行该App
-        if (!MainApplication.forbiddentPackages.contains(msg)){
+        if (!MyApp.forbiddentPackages.contains(msg)){
             return;
         }
         if (!isShow) {
@@ -50,7 +50,7 @@ public class DialogUtil {
                     public void onClick(DialogInterface dialog, int id) {
                         isShow = false;
                         dialog.dismiss();
-                        if (!MainApplication.appRuningInfo.getPackageName().equals(AppConstance.APP_PACKAGE_NAME)
+                        if (!MyApp.appRuningInfo.getPackageName().equals(AppConstance.APP_PACKAGE_NAME)
                             && !moveToFront()
                            ) {
                             Intent intent = new Intent(context, MainActivity.class);

@@ -20,7 +20,7 @@ import com.lightingstar.appmonitor.util.sdkinit.XUpdateInit;
 
 import java.util.HashSet;
 
-public class MainApplication extends Application {
+public class MyApp extends Application {
 
     public static HashSet<String> forbiddentPackages;
 
@@ -54,7 +54,7 @@ public class MainApplication extends Application {
         XUpdateInit.init(this);
 
         //运营统计数据运行时不初始化
-        if (!MainApplication.isDebug()) {
+        if (!MyApp.isDebug()) {
             UMengInit.init(this);
         }
 

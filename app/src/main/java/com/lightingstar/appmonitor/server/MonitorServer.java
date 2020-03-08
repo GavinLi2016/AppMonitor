@@ -8,8 +8,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
-import com.lightingstar.appmonitor.MainActivity;
-import com.lightingstar.appmonitor.MainApplication;
+import com.lightingstar.appmonitor.activity.MainActivity;
+import com.lightingstar.appmonitor.MyApp;
 import com.lightingstar.appmonitor.model.AppConstance;
 import com.lightingstar.appmonitor.util.DialogUtil;
 import com.lightingstar.appmonitor.util.RecordAppInfoUtil;
@@ -59,7 +59,7 @@ public class MonitorServer extends Service {
 
         this.dialogUtil = new DialogUtil(this);
         this.recordAppInfoUtil = new RecordAppInfoUtil();
-        MainApplication.setMessage(serverMsger);
+        MyApp.setMessage(serverMsger);
 
         return START_STICKY;
     }

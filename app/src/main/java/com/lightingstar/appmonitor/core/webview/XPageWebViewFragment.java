@@ -62,7 +62,7 @@ import com.just.agentweb.download.DefaultDownloadImpl;
 import com.just.agentweb.download.DownloadListenerAdapter;
 import com.just.agentweb.download.DownloadingService;
 import com.just.agentweb.widget.IWebLayout;
-import com.lightingstar.appmonitor.MainApplication;
+import com.lightingstar.appmonitor.MyApp;
 import com.lightingstar.appmonitor.R;
 import com.lightingstar.appmonitor.core.BaseFragment;
 import com.lightingstar.appmonitor.util.XToastUtils;
@@ -184,7 +184,7 @@ public class XPageWebViewFragment extends BaseFragment {
                 //WebView载入该url地址的页面并显示。
                 .go(getUrl());
 
-        if (MainApplication.isDebug()) {
+        if (MyApp.isDebug()) {
             AgentWebConfig.debug();
         }
 

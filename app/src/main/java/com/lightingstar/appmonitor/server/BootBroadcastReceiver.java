@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.lightingstar.appmonitor.MainActivity;
+import com.lightingstar.appmonitor.activity.MainActivity;
 import com.lightingstar.appmonitor.model.AppConstance;
 import com.lightingstar.appmonitor.util.LogUtil;
 
