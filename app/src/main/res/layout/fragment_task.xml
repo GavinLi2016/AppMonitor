@@ -29,22 +29,13 @@
         app:srlEnableAutoLoadMore="true"
         app:srlEnableLoadMore="true">
 
-        <com.scwang.smartrefresh.header.MaterialHeader
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <ListView
+            android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/white"
             android:overScrollMode="never"
-            tools:listitem="@layout/adapter_item_simple_list_2" />
-
-
-        <!--    注意修改包名时，这里也需要修改    -->
-        <com.lightingstar.appmonitor.widget.MaterialFooter
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            tools:listitem="@layout/app_list_item" />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

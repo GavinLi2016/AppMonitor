@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -19,8 +18,8 @@ import com.lightingstar.appmonitor.core.BaseFragment;
 import com.lightingstar.appmonitor.fragment.profile.ProfileFragment;
 import com.lightingstar.appmonitor.fragment.task.TaskFragment;
 import com.lightingstar.appmonitor.fragment.webapp.WebAppFragment;
-import com.lightingstar.appmonitor.server.MonitorServer;
 import com.lightingstar.appmonitor.util.PermissionsUtil;
+import com.lightingstar.appmonitor.util.XToastUtils;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
@@ -63,9 +62,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        startService(new Intent(getApplicationContext(), MonitorServer.class));
+        //startService(new Intent(getApplicationContext(), MonitorServer.class));
 
-        this.checkPermission();
+        //this.checkPermission();
     }
 
     private void initViews() {
@@ -97,7 +96,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         @Override
         public void forbitPermissons() {
             //这是没有通过权限的时候提示的内容，自定义即可
-            Toast.makeText(getApplicationContext(), "您没有允许部分权限，可能会导致部分功能不能正常使用，如需正常使用 请允许权限", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "您没有允许部分权限，可能会导致部分功能不能正常使用，如需正常使用 请允许权限", Toast.LENGTH_SHORT).show();
+            XToastUtils.toast("您没有允许部分权限，可能会导致部分功能不能正常使用，如需正常使用 请允许权限");
             finish();
             //   Tool.exitApp();
         }
@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME) {
             moveTaskToBack(false);
             return true;
         }

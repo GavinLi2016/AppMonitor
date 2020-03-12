@@ -17,16 +17,15 @@
 
 package com.lightingstar.appmonitor.fragment.task;
 
-import androidx.recyclerview.widget.RecyclerView;
+import android.widget.AbsListView;
 
+import com.lightingstar.appmonitor.MyApp;
 import com.lightingstar.appmonitor.R;
 import com.lightingstar.appmonitor.adapter.TaskListViewListAdapter;
 import com.lightingstar.appmonitor.core.BaseFragment;
-import com.lightingstar.appmonitor.util.MockDataProvider;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
-import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 
 import butterknife.BindView;
@@ -40,8 +39,8 @@ import butterknife.BindView;
 @Page(anim = CoreAnim.none)
 public class TaskFragment extends BaseFragment {
 
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    @BindView(R.id.listView)
+    AbsListView listView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
 
@@ -71,8 +70,8 @@ public class TaskFragment extends BaseFragment {
     @Override
     protected void initViews() {
         mAdapter = new TaskListViewListAdapter();
-        WidgetUtils.initRecyclerView(recyclerView, 0);
-        recyclerView.setAdapter(mAdapter);
+        //WidgetUtils.initRecyclerView(recyclerView, 0);
+        listView.setAdapter(mAdapter);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class TaskFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             // TODO: 2020-02-25 这里只是模拟了网络请求
             refreshLayout.getLayout().postDelayed(() -> {
-                mAdapter.refresh(MockDataProvider.getTaskInfos());
+                mAdapter.refresh(MyApp.queryAppInfoTask.getAppInfos());
                 refreshLayout.finishRefresh();
             }, 1000);
         });
@@ -89,7 +88,7 @@ public class TaskFragment extends BaseFragment {
         refreshLayout.setOnLoadMoreListener(refreshLayout -> {
             // TODO: 2020-02-25 这里只是模拟了网络请求
             refreshLayout.getLayout().postDelayed(() -> {
-                mAdapter.loadMore(MockDataProvider.getTaskInfos());
+                mAdapter.loadMore(MyApp.queryAppInfoTask.getAppInfos());
                 refreshLayout.finishLoadMore();
             }, 1000);
         });

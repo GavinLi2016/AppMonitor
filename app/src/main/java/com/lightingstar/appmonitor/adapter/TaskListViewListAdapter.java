@@ -17,16 +17,13 @@
 
 package com.lightingstar.appmonitor.adapter;
 
-import androidx.annotation.NonNull;
-
 import com.lightingstar.appmonitor.R;
-import com.lightingstar.appmonitor.model.TaskInfo;
-import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
-import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
-import com.xuexiang.xui.adapter.recyclerview.XRecyclerAdapter;
+import com.lightingstar.appmonitor.model.AppBasicInfo;
+import com.scwang.smartrefresh.layout.adapter.SmartRecyclerAdapter;
+import com.scwang.smartrefresh.layout.adapter.SmartViewHolder;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * 首页动态新闻【只是用于演示效果】
@@ -34,39 +31,28 @@ import java.util.List;
  * @author XUE
  * @since 2019/5/9 10:41
  */
-public class TaskListViewListAdapter extends BaseRecyclerAdapter<TaskInfo> {
+public class TaskListViewListAdapter extends SmartRecyclerAdapter<AppBasicInfo> {
+
+    public TaskListViewListAdapter() {
+        super(R.layout.app_list_item);
+    }
+
+    public TaskListViewListAdapter(Collection<AppBasicInfo> data) {
+        super(data, R.layout.app_list_item);
+    }
+
     /**
-     * 适配的布局
+     * 绑定布局控件
      *
-     * @param viewType
-     * @return
+     * @param holder
+     * @param model
+     * @param position
      */
     @Override
-    protected int getItemLayoutId(int viewType) {
-
-        return R.layout.adapter_item_simple_list_2;
+    protected void onBindViewHolder(SmartViewHolder holder, AppBasicInfo model, int position) {
+        holder.text(R.id.app_name, model.getName());
+        RadiusImageView image = (RadiusImageView) holder.findViewById(R.id.app_icon);
+        image.setImageDrawable(model.getAppIcon());
+        holder.textColorId(R.id.app_name, R.color.xui_config_color_light_blue_gray);
     }
-
-    @Override
-    public int getItemViewType(int position) {
-      return 1;
-    }
-
-    public XRecyclerAdapter refresh(List<TaskInfo> data) {
-        List<TaskInfo> list = new ArrayList<>(data);
-        //用于占位
-        list.add(0, new TaskInfo());
-        return super.refresh(list);
-    }
-
-    @Override
-    public void bindData(@NonNull RecyclerViewHolder holder, int position, TaskInfo model) {
-        if (model == null) {
-            return;
-        }
-
-        holder.text(R.id.tv_title, model.getTaskName());
-        holder.text(R.id.tv_sub_title, model.getScore());
-    }
-
 }

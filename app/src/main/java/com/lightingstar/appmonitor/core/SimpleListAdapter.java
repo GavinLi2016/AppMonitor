@@ -46,14 +46,14 @@ public class SimpleListAdapter extends BaseListAdapter<Map<String, String>, Simp
     @Override
     protected ViewHolder newViewHolder(View convertView) {
         ViewHolder holder = new ViewHolder();
-        holder.mTvTitle = convertView.findViewById(R.id.tv_title);
-        holder.mTvSubTitle = convertView.findViewById(R.id.tv_sub_title);
+        //holder.mTvTitle = convertView.findViewById(R.id.tv_title);
+        //holder.mTvSubTitle = convertView.findViewById(R.id.tv_sub_title);
         return holder;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.adapter_item_simple_list_2;
+        return R.id.listView;
     }
 
     @Override

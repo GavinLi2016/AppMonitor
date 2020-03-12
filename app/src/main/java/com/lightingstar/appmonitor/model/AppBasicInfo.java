@@ -1,9 +1,20 @@
 package com.lightingstar.appmonitor.model;
 
+import android.graphics.drawable.Drawable;
+
 public class AppBasicInfo {
     String packageName;
-    Integer version;
+    String version;
     String name;
+    public Drawable appIcon;
+
+    public Drawable getAppIcon() {
+        return appIcon;
+    }
+
+    public void setAppIcon(Drawable appIcon) {
+        this.appIcon = appIcon;
+    }
 
     public String getPackageName() {
         return packageName;
@@ -13,11 +24,11 @@ public class AppBasicInfo {
         this.packageName = packageName;
     }
 
-    public Integer getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 

@@ -28,7 +28,7 @@ public class MyApp extends Application {
 
     public static AppRuningInfo appRuningInfo = new AppRuningInfo();
 
-    private static QueryAppInfoTask queryAppInfoTask;
+    public static QueryAppInfoTask queryAppInfoTask;
     private static MyAsyncTaskTemplate myAsyncTaskTemplate = new MyAsyncTaskTemplate();
 
     @Override
